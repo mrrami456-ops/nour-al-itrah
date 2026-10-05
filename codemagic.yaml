@@ -9,7 +9,7 @@ workflows:
     scripts:
       - name: تثبيت الحزم البرمجية وبناء واجهة نور العترة
         script: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
       - name: إعداد بيئة الأندرويد الهجينة الصافية (Capacitor Android)
         script: |
