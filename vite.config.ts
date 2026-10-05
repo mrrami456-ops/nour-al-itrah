@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: './', // <--- أضف هذا السطر هنا لحل مشكلة مسارات البناء نهائياً
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
