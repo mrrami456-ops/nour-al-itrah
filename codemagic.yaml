@@ -7,18 +7,43 @@ workflows:
       node: 22
       java: 21
     scripts:
-      - name: تثبيت الحزم البرمجية وبناء واجهة نور العترة
+      - name: ١. تجهيز ملفات الإعداد وبناء واجهة نور العترة
         script: |
+          cat << 'EOF' > firebase-applet-config.json
+          {
+            "projectId": "lyrical-env-qvr20",
+            "appId": "1:173197035020:web:ce1072b74a832ce248d029",
+            "apiKey": "AIzaSyBzE1SzJnmjG8Ke04km5F-nyF8uLxv2OIk",
+            "authDomain": "lyrical-env-qvr20.firebaseapp.com",
+            "firestoreDatabaseId": "ai-studio-9e4f4c66-1ea5-4257-8db1-6264fdff46a5",
+            "storageBucket": "lyrical-env-qvr20.firebasestorage.app",
+            "messagingSenderId": "173197035020",
+            "measurementId": "",
+            "oAuthClientId": "173197035020-4ns6vj2lno0n050rsuba9pnsiks6ntbl.apps.googleusercontent.com",
+            "recaptchaSiteKey": ""
+          }
+          EOF
+          cat << 'EOF' > capacitor.config.json
+          {
+            "appId": "com.nooralitrah.app",
+            "appName": "نور العترة",
+            "webDir": "dist",
+            "bundledWebRuntime": false,
+            "server": {
+              "androidScheme": "https"
+            }
+          }
+          EOF
           npm install --legacy-peer-deps
           npm run build
-      - name: إعداد بيئة الأندرويد الهجينة الصافية (Capacitor Android)
+      - name: ٢. إعداد بيئة الأندرويد الهجينة (Capacitor Android)
         script: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android --no-save
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 --no-save --legacy-peer-deps
           if [ ! -d "android" ]; then
             npx cap add android
           fi
           npx cap sync android
-      - name: تجميع وبناء ملف APK الصافي
+      - name: ٣. تجميع وبناء ملف APK النهائي
         script: |
           cd android
           chmod +x gradlew
