@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "نور العترة",
+  "short_name": "نور العترة",
+  "description": "تطبيق إسلامي شامل يضم مواقيت الصلاة الجعفرية، القرآن الكريم، مفاتيح الجنان، تقويم أهل البيت (ع)، وروضة المتوفين.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#082216",
+  "theme_color": "#0B3B24",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
