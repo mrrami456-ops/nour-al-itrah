@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "MartyrRecord": {
+      "title": "MartyrRecord",
+      "description": "Represents a deceased believer or martyr in Rawdat Al-Shuhada wal-Mutawaffeen for reciting Surah Al-Fatiha.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the deceased or martyr.",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "deathDate": {
+          "type": "string",
+          "description": "Hijri or Gregorian date of passing.",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "Optional URL to portrait photo of the deceased.",
+          "maxLength": 600
+        },
+        "bio": {
+          "type": "string",
+          "description": "Optional short tribute, title, or hometown (e.g., من شهداء الصلاة بالأحساء / المدينة المنورة).",
+          "maxLength": 240
+        },
+        "fatihaCount": {
+          "type": "number",
+          "description": "Total number of Surah Al-Fatiha recitations gifted to their soul."
+        },
+        "isVisible": {
+          "type": "boolean",
+          "description": "Public visibility flag for list queries."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "name",
+        "deathDate",
+        "photoUrl",
+        "bio",
+        "fatihaCount",
+        "isVisible",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/martyrs/{martyrId}": {
+      "schema": {
+        "$ref": "#/entities/MartyrRecord"
+      },
+      "description": "Public memorial cards for Rawdat Al-Shuhada wal-Mutawaffeen."
+    }
+  }
+}

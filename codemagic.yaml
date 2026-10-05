@@ -1,0 +1,27 @@
+workflows:
+  android-apk-workflow:
+    name: بناء تطبيق نور العترة (Android APK)
+    max_build_duration: 30
+    instance_type: linux_x2
+    environment:
+      node: 22
+      java: 21
+    scripts:
+      - name: تثبيت الحزم البرمجية وبناء واجهة نور العترة
+        script: |
+          npm install
+          npm run build
+      - name: إعداد بيئة الأندرويد الهجينة الصافية (Capacitor Android)
+        script: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android --no-save
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+      - name: ضبط اسم التطبيق (نور العترة) وبناء ملف APK الصافي
+        script: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - android/app/build/outputs/apk/debug/app-debug.apk

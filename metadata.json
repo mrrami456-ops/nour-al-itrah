@@ -1,0 +1,6 @@
+{
+  "name": "نور العترة - رفيق المؤمن",
+  "description": "تطبيق إسلامي شامل يضم مواقيت الصلاة وفق الفقه الجعفري، تقويم ومناسبات أهل البيت (عليهم السلام)، مفاتيح الجنان المفهرس، وتعقيبات الصلوات اليومية.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

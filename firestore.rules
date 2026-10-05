@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidMartyrRecord(data) {
+      return data.keys().hasAll([
+        'name',
+        'deathDate',
+        'photoUrl',
+        'bio',
+        'fatihaCount',
+        'isVisible',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'name',
+        'deathDate',
+        'photoUrl',
+        'bio',
+        'fatihaCount',
+        'isVisible',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.name is string && data.name.size() >= 2 && data.name.size() <= 120 &&
+      data.deathDate is string && data.deathDate.size() >= 2 && data.deathDate.size() <= 80 &&
+      data.photoUrl is string && data.photoUrl.size() <= 600 &&
+      data.bio is string && data.bio.size() <= 240 &&
+      data.fatihaCount is int && data.fatihaCount >= 0 &&
+      data.isVisible is bool &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    // Connection test document
+    match /test/{docId} {
+      allow get: if isValidId(docId);
+    }
+
+    // Rawdat Al-Shuhada wal-Mutawaffeen Collection
+    match /martyrs/{martyrId} {
+      allow get: if isValidId(martyrId) && existing().isVisible == true;
+      allow list: if existing().isVisible == true;
+
+      allow create: if isValidId(martyrId) &&
+        isValidMartyrRecord(incoming()) &&
+        incoming().isVisible == true &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isValidId(martyrId) &&
+        isValidMartyrRecord(incoming()) &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time && (
+          // Action 1: Reciting Surah Al-Fatiha (increments fatihaCount by 1)
+          (
+            incoming().diff(existing()).affectedKeys().hasOnly(['fatihaCount', 'updatedAt']) &&
+            incoming().fatihaCount == existing().fatihaCount + 1
+          ) ||
+          // Action 2: Admin editing martyr details (name, deathDate, photoUrl, bio, fatihaCount)
+          (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'name',
+              'deathDate',
+              'photoUrl',
+              'bio',
+              'fatihaCount',
+              'isVisible',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isValidId(martyrId);
+    }
+  }
+}

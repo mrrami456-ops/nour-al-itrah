@@ -1,0 +1,19 @@
+{
+  "appId": "com.nooralitrah.app",
+  "appName": "نور العترة",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#082216",
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "backgroundColor": "#082216"
+    }
+  }
+}
