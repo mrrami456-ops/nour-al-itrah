@@ -34,6 +34,11 @@ workflows:
             }
           }
           EOF
+          if [ ! -f "src/main.tsx" ] && [ -f "main.tsx" ]; then
+            mkdir -p src
+            mv main.tsx App.tsx firebase.ts index.css src/ 2>/dev/null || true
+            mv components data utils src/ 2>/dev/null || true
+          fi
           npm install --legacy-peer-deps
           npm run build
       - name: ٢. إعداد بيئة الأندرويد الهجينة (Capacitor Android)
