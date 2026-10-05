@@ -34,11 +34,27 @@ workflows:
             }
           }
           EOF
-          if [ ! -f "src/main.tsx" ] && [ -f "main.tsx" ]; then
-            mkdir -p src
+          # إعادة بناء هيكل المجلدات تلقائياً إذا كانت الملفات مرفوعة بدون مجلدات
+          mkdir -p src/components src/data src/utils
+          if [ -f "main.tsx" ] && [ ! -f "src/main.tsx" ]; then
             mv main.tsx App.tsx firebase.ts index.css src/ 2>/dev/null || true
-            mv components data utils src/ 2>/dev/null || true
           fi
+          for comp in ApkCloudGuideModal.tsx CalendarSection.tsx MafatihSection.tsx MartyrsSection.tsx PrayerTimesSection.tsx QuranSection.tsx SplashScreen.tsx TaqeebatSection.tsx; do
+            if [ -f "$comp" ] && [ ! -f "src/components/$comp" ]; then
+              mv "$comp" src/components/ 2>/dev/null || true
+            fi
+          done
+          for dfile in ahlulbaytEvents.ts mafatihData.ts quranData.ts taqeebatData.ts; do
+            if [ -f "$dfile" ] && [ ! -f "src/data/$dfile" ]; then
+              mv "$dfile" src/data/ 2>/dev/null || true
+            fi
+          done
+          if [ -f "prayerTimes.ts" ] && [ ! -f "src/utils/prayerTimes.ts" ]; then
+            mv prayerTimes.ts src/utils/ 2>/dev/null || true
+          fi
+          if [ -d "components" ]; then cp -rn components/* src/components/ 2>/dev/null || true; fi
+          if [ -d "data" ]; then cp -rn data/* src/data/ 2>/dev/null || true; fi
+          if [ -d "utils" ]; then cp -rn utils/* src/utils/ 2>/dev/null || true; fi
           npm install --legacy-peer-deps
           npm run build
       - name: ٢. إعداد بيئة الأندرويد الهجينة (Capacitor Android)
